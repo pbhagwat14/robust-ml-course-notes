@@ -197,7 +197,8 @@ achieve more robust decision-making.
     \item Model parameters: $\theta \in \Theta$ (assume finite-dimensional).  
     \item Loss function: $\ell(\vec{z}, \vec{\theta})$ measures the cost of
     using parameter $\vec{\theta}$ on data realization $\vec{z}$. \abedit{In a
-    classification setting, $\vec{z}=(\vec{x},y)$, and loss is measured by the dispre}  
+    classification setting, $\vec{z}=(\vec{x},y)$, and loss is measured by the
+    discrepancy between $\hat{y}$ predicted using $\vec{\theta}$ and y.}  
 \end{itemize}
 
 \subsection{DRO Formulation}
@@ -251,8 +252,8 @@ representation, making it computationally attractive.
 From a statistical standpoint, $\mathcal{B}$ may contain distributions far from
 the empirical distribution $\hat{\mathbb{P}}_n$, even for small $\delta_1,
 \delta_2$. As $n \to \infty$, $\hat{\mathbb{P}}_n \overset{w.p. 1}{\rightarrow}
-\mathbb{P}_\star$ under i.i.d.\ assumptions, but the set $\mathcal{B}$ may still
-include distributions that may be far from $\mathbb{P_\star}$ (overly
+\mathbb{P}^\star$ under i.i.d.\ assumptions, but the set $\mathcal{B}$ may still
+include distributions that may be far from $\mathbb{P^\star}$ (overly
 conservative). This conservatism may hurt performance, except in cases where the
 optimal solution only depends on first and second moments.  
 
@@ -284,7 +285,7 @@ $A \in \mathcal{F}$,
 \end{align*}
 Thus, $Q \ll P$ (read as $P$ \emph{dominates} $Q$).
 
-\subsubsection*{Continuous R.V.s}
+\subsubsection*{Continuous Random Variables:}
 Let $\mathbb{P}_X (A) = \mathbb{P}(X \in A)$ which forms a probability space
 with $(\Omega, \mathcal{F}) \text{ where } \Omega = \mathbb{R}$, $X:\Omega \to
 \mathbb{R}$ and $\mathcal{F}$ is Borel $\sigma$-field.  
@@ -332,8 +333,7 @@ divergence.
     (t+1)\log (\tfrac{t+1}{2}) \big)$
 \end{enumerate}
 
-\subsubsection*{KL Divergence:}
-\textbf{Intuition:} 
+\subsubsection*{KL Divergence Intuition:}
 \[
 H(Q, P) - H(Q) 
 = \sum_x Q(x) \log \frac{1}{P(x)} - \sum_x Q(x)\log \frac{1}{Q(x)}
@@ -342,9 +342,9 @@ H(Q, P) - H(Q)
 \implies D_{\mathrm{KL}}(Q \| P) = \sum_x Q(x) \log \frac{Q(x)}{P(x)} 
 \]
 
-Thus, this implies Excess entropy from incorrect distribution.
+Thus, this implies excess entropy from incorrect distribution.
 
-\subsubsection*{Total Variation Distance}
+\subsubsection*{Total Variation Distance:}
 \[
 \mathrm{TV}(Q,P) = \int_{z} \frac{1}{2} \left| \frac{Q(x)}{P(x)} - 1 \right| P(x)\, dx 
 = \frac{1}{2} \int_{z} |Q(x) - P(x)| dx 
