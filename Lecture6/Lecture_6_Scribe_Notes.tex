@@ -7,6 +7,7 @@
 \newcommand{\ab}[1]{\textcolor{purple}{[#1 - AB]}}
 \newcommand{\abedit}[1]{\textcolor{purple}{#1}}
 
+\newtheorem{definition}{Definition}[chapter]
 
 \begin{document}
 
@@ -67,13 +68,12 @@ The empirical distribution $\hat{\mathbb{P}}_n$ is a discrete measure with
 uniform weights $a_i = \tfrac{1}{n} \text{ and also note} \sum_{i} a_i = 1$.
 
 \subsection{Learning via Optimization}
-The \textbf{true (or population) risk minimization} problem is
+The \textbf{true (or population) risk minimization} problem is \textbf{expected loss} under the true distribution $\mathbb{P^*}$.
 \[
     \min_{\theta \in \Theta} \, \mathbb{E}_{z \sim \mathbb{P^*}} \big[ \ell(\theta, z) \big] 
     = \min_{\theta} \int_z \ell(\theta, z) \, d\mathbb{P^*}(z).
 \]
-\ab{what is?}That is \textbf{expected loss} under the true distribution $\mathbb{P^*}$. Since
-$\mathbb{P^*}$ is unknown, we approximate using the \textbf{empirical risk}:
+Since $\mathbb{P^*}$ is unknown, we approximate using the \textbf{empirical risk}:
 \[
     \min_{\theta \in \Theta} \, \mathbb{E}_{z \sim \hat{\mathbb{P}}_n} \big[ \ell(\theta, z) \big] 
     = \frac{1}{n} \sum_{i=1}^n \ell(\theta, z_i).
@@ -82,15 +82,16 @@ $\mathbb{P^*}$ is unknown, we approximate using the \textbf{empirical risk}:
 This is the principle of \textbf{Empirical Risk Minimization (ERM)}~\cite{uml}.
 
 \subsection{Parameter Estimation}
-The goal is to learn $\hat{\theta} : \mathcal{P}(z) \to \Theta$ such that \ab{What is $\mathcal{P}$}
+Let $z=(x, y)$ denote a data point, where $x$ is the input and $y$ is the target label. Let $\mathcal{P}(z)$ denote the set of all probability distributions over $z$.
+The goal is to learn $\hat{\theta} : \mathcal{P}(z) \to \Theta$ such that
 \[
     \mathbb{E}_{z \sim \mathbb{P^*}} \big[ \ell(\hat{\theta}(\hat{\mathbb{P}}_n), z) \big]
 \]
-is minimized. \abedit{In general, this is the framework of
+is minimized. In general, this is the framework of
 M-estimation~\cite{van2000asymptotic} (a generalization of maximum-likelihood
 estimation), where different choices of $\ell$ lead to different statistics of
 the underlying distribution such as the median arising from $\ell=|\theta -
-z|$.}
+z|$.
 
 \noindent \textbf{Example (Squared Loss):}
 Using squared loss 
@@ -106,8 +107,7 @@ the optimal $\theta$ corresponds to the \textbf{mean} of the distribution.
     \caption{Data-Driven Decision Making Cycle}
     \label{fig1}
 \end{figure}
-In the conventional data-driven decision-making cycle given in Figure~\ref{fig1}
-\ab{add citation}, we observe $n$ i.i.d.\ samples generated from the unknown
+In the conventional data-driven decision-making cycle given in Figure~\ref{fig1}~\cite{blanchet2024distributionally}, we observe $n$ i.i.d.\ samples generated from the unknown
 data-generating distribution $\mathbb{P}^\star$, and build a model
 $\hat{\mathbb{P}}_n$ from these samples (model could be parametric or
 non-parametric). Based on $\hat{\mathbb{P}}_n$, we make a decision (e.g.,
@@ -172,7 +172,7 @@ Several factors can lead to suboptimal performance in this cycle:
 Let $\mathbb{P}^*$ denote the true underlying data-generating distribution. We
 are ultimately interested in learning a model $\hat{\mathbb{P}}_n$ that is close
 to $\mathbb{P}^*$. However, data contamination can occur at different stages of
-the pipeline as shown in Figure~\ref{fig2}.
+the pipeline as shown in Figure~\ref{fig2}~\cite{blanchet2024distributionally}.
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.85\textwidth]{images/img2.png}
@@ -196,9 +196,9 @@ achieve more robust decision-making.
     \xi$, distributed according to the true distribution $\mathbb{P}^\star$.  
     \item Model parameters: $\theta \in \Theta$ (assume finite-dimensional).  
     \item Loss function: $\ell(\vec{z}, \vec{\theta})$ measures the cost of
-    using parameter $\vec{\theta}$ on data realization $\vec{z}$. \abedit{In a
+    using parameter $\vec{\theta}$ on data realization $\vec{z}$. In a
     classification setting, $\vec{z}=(\vec{x},y)$, and loss is measured by the
-    discrepancy between $\hat{y}$ predicted using $\vec{\theta}$ and y.}  
+    discrepancy between $\hat{y}$ predicted using $\vec{\theta}$ and y.
 \end{itemize}
 
 \subsection{DRO Formulation}
@@ -303,7 +303,8 @@ In probability theory, this term is known as probability density function of a
 random variable. Usually, $p_X = p(X) \text{ and } A = \left[a, b\right]
 \Rightarrow \mathbb{P}_X(\left[a, b\right]) = \int_{a}^{b} p(x) \, dx$.
 
-\paragraph{Definition:} \ab{Of what? Use definition environment} Assume $\phi :
+\begin{definition}[$\phi$-divergence]
+Assume $\phi :
 \mathbb{R}_{+} \to \left(-\infty, +\infty\right]$ is a convex function with
 $\phi(0) = \lim_{t \to 0^+} \phi(t),$ then the $\phi$-divergence between
 $\mathbb{Q}$ and $\hat{\mathbb{P}}_n$ is
@@ -314,6 +315,7 @@ D_{\phi}(\mathbb{Q}, \hat{\mathbb{P}}_{n}) =
         +\infty, & \quad \text{otherwise}.
     \end{cases}
 \]
+\end{definition}
 Where, $\tfrac{d\mathbb{Q}}{d\hat{\mathbb{P}}_{n}}$ = likelihood ratio
 (Radon–Nikodym derivative) and $\mathbb{Q}$ is absolutely continuous w.r.t.\
 $\hat{\mathbb{P}}_n$.\\
@@ -328,8 +330,8 @@ divergence.
 \begin{enumerate}
     \item KL divergence: $\phi(t) = t \log t$
     \item Reverse KL divergence: $\phi(t) = -\log t$
-    \item Total Variation distance: $\varphi(t) = \tfrac{1}{2} |t - 1|$
-    \item Jensen-Shannon divergence: $\varphi(t) = \tfrac{1}{2} \big( t \log t -
+    \item Total Variation distance: $\phi(t) = \tfrac{1}{2} |t - 1|$
+    \item Jensen-Shannon divergence: $\phi(t) = \tfrac{1}{2} \big( t \log t -
     (t+1)\log (\tfrac{t+1}{2}) \big)$
 \end{enumerate}
 
@@ -398,7 +400,7 @@ Thus, this implies excess entropy from incorrect distribution.
     \begin{proof}
     If $Q = P$, then $\tfrac{dQ}{dP}=1$ everywhere and hence
     \[
-        D_\phi(Q,P) = \int_\Xi \phi(1) dP = 0.
+        D_\phi(Q,P) = \int_{\mathcal{Z}} \phi(1) dP = 0.
     \]
     Conversely, if $D_\phi(Q,P)=0$, then by strict convexity of $\phi$ (minimum
     at $t=1$), we must have
@@ -435,7 +437,7 @@ We want to show that for any measurable function $f : X \to [-\infty,\infty]$,
 with the usual convention that the integral may take values $\pm \infty$ if $f$
 is not integrable.  
 When $f$ is integrable (i.e. $\int |f| \, d\delta_x < \infty$), the value is a
-finite real number equal to $f(x)$. \ab{Add citation to where the proof is from}
+finite real number equal to $f(x)$.~\cite{folland2013real}
 \section*{Proof}
 \subsection*{Step 1: Indicator functions}
 
